@@ -17,6 +17,7 @@ YOFF = 2*CS
 INCR = 0.005
 pygame.init()
 FONT = pygame.font.Font(None, 24)
+PROJ = [[1, 0, 0], [0, 1, 0]]
 
 def main(argv):
     DISPLAY.fill(BG_COLOUR)
@@ -54,8 +55,9 @@ def main(argv):
                     (cube_arr[j][0][0]+XOFF, cube_arr[j][1][0]+YOFF),
                     4)
         for i in cube_arr:
-            pygame.draw.circle(DISPLAY, RED, (int(i[0][0])+XOFF,
-                int(i[1][0])+YOFF), 4, 0)
+            v = matmul(PROJ, i)
+            pygame.draw.circle(DISPLAY, RED, (int(v[0][0])+XOFF,
+                int(v[1][0])+YOFF), 4, 0)
         status = f"dθ_x/dt: {round(theta_x, 2)} dθ_y/dt: {round(theta_y, 2)} dθ_z/dt: {round(theta_z, 2)}"
         show_angles(status)
         pygame.display.update()
