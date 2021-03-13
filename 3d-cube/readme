@@ -1,0 +1,9 @@
+Python 3.6 or newer
+Pygame
+
+z	increase d\theta_z/dt
+a	decrease d\theta_z/dt
+x	increase d\theta_x/dt
+r	decrease d\theta_x/dt
+y	increase d\theta_y/dt
+9	decrease d\theta_y/dt
