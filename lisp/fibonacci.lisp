@@ -1,16 +1,16 @@
 ;;; Here is the Fibonacci sequence, solved
 ;;; procedurally, in the C programming language:
 
-;;; int fib(int n)
-;;; {
-;;;     int a = 0, b = 1, tmp;
-;;;     for (int i = 1; i < n; i++) {
-;;;         tmp = b;
-;;;         b += a;
-;;;         a = tmp;
-;;;     }
-;;;     return a;
-;;; }
+int fib(int n)
+{
+    int a = 0, b = 1, tmp;
+    for (int i = 1; i < n; i++) {
+        tmp = b;
+        b += a;
+        a = tmp;
+    }
+    return a;
+}
 
 ;; However, it can be defined very elegantly with
 ;; "simple" recursion:

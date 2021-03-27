@@ -1,3 +1,5 @@
+# a modified version of mat.py, for use in 3d-cube
+
 # A:
 # 1 2
 # 3 4
@@ -7,8 +9,13 @@
 
 # no safety nets
 
-def prinmat(M):
-    [[print(i) for i in row] for row in M]
+def printmat(M):
+    print('[')
+    for row in M:
+        for i in row:
+            print(round(i, 1), end = '\t')
+        print()
+    print(']')
 
 def scamul(k, M):
     return [[k*val for val in row] for row in M]
