@@ -1,4 +1,4 @@
-# Transformations on the complex plane
+# Transformations of the complex plane
 
 	-m	Monochrome: no colours
 
