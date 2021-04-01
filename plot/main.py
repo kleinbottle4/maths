@@ -1,27 +1,30 @@
 import pygame
 from pygame.locals import *
-import math
 import cmath
 
 WIDTH = 500
-FPS   = 30
-BG = 0x000000
-FG = 0xffffff
+BG = 0xffffff
+FG = 0x000000
 
 def main(argv):
     DISPLAY = pygame.display.set_mode((WIDTH, WIDTH))
     DISPLAY.fill(BG)
     px = pygame.PixelArray(DISPLAY)
 
-    MIN = -50
-    MAX = 50
-    STEP = 0.5
+    MIN = -10
+    MAX = 10
+    STEP = 0.1
+
+    # x^2 - x - 1 = 0
+    PHI = 1.61803398875
+    PHI2 = -0.61803398875
 
     a = MIN
     while a < MAX:
         b = MIN
         while b < MAX:
-            z = complex(a, b) ** 2
+            w = complex(a, b)
+            z = (PHI**w - PHI2**w) / (PHI - PHI2)
             print(str(z))
             x = int(z.real) + 250
             y = - int(z.imag) + 250
