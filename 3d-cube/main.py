@@ -5,21 +5,25 @@ from mat import *
 
 WIDTH = 500
 FPS   = 30
+DISPLAY = pygame.display.set_mode((WIDTH, WIDTH))
+
+pygame.init()
+FONT = pygame.font.SysFont("FreeMono", 15)
+
 RED   = 0xff0000
 BLACK = (0, 0, 0)
 WHITE = 0xffffff
 BG_COLOUR = WHITE
 FG_COLOUR = BLACK
-CS = 100 # cube length
-DISPLAY = pygame.display.set_mode((WIDTH, WIDTH))
-XOFF = 2*CS
-YOFF = 2*CS
+
+CS = int(0.25 * WIDTH) # cube length
 INCR = 0.005 # of angle t
-pygame.init()
-FONT = pygame.font.Font(None, 24)
 PROJ = [[1, 0, 0],
        [0, 1, 0]]
-PYG = [[1, 0], [0, -1]]# convert to pygame coordinates
+
+PYG = [[1, 0], [0, -1]] # convert to pygame coordinates
+XOFF = int(0.5 * WIDTH)
+YOFF = XOFF
 
 def main(argv):
     DISPLAY.fill(BG_COLOUR)
@@ -50,15 +54,20 @@ def main(argv):
         pgc_mat_t = transpose(pgc_mat)
 
         DISPLAY.fill(BG_COLOUR)
+
+        # join up lines
         for i, j in [(0, 1), (0, 2), (0, 4), (1, 3), (1, 5), (2, 3), (2,
             6), (3, 7), (4, 5), (4, 6), (5, 7), (6, 7)]:
             pygame.draw.line(DISPLAY, BLACK,
                     (pgc_mat_t[i][0]+XOFF, pgc_mat_t[i][1]+YOFF),
                     (pgc_mat_t[j][0]+XOFF, pgc_mat_t[j][1]+YOFF),
                     4)
+        # highlight vertices
         for row in pgc_mat_t:
             pygame.draw.circle(DISPLAY, RED, (int(row[0])+XOFF,
                 int(row[1])+YOFF), 4, 0)
+
+        # show angle derivatives
         status = f"dθ_x/dt: {round(t_x, 2)} dθ_y/dt: {round(t_y, 2)} dθ_z/dt: {round(t_z, 2)}"
         show_angles(status)
         pygame.display.update()
@@ -75,7 +84,7 @@ def key_handler(_x, _y, _z):
             K_x: (0, 1),
             K_r: (0, -1),
             K_y: (1, 1),
-            K_9: (1, -1)
+            K_9: (1, -1),
             K_z: (2, 1),
             K_a: (2, -1),
             }
@@ -105,8 +114,7 @@ def rot_z(t):
     return [
             [ cos(t), -sin(t), 0],
             [ sin(t), cos(t),  0],
-            [ 0,      0,       1]
-            ]
+            [ 0,      0,       1] ]
 
 if __name__ == '__main__':
     from sys import argv
