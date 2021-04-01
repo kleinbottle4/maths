@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import cmath
+from cmath import *
 
 WIDTH = 500
 HALFWIDTH = int(WIDTH/2)
@@ -8,15 +8,15 @@ BG = 0xffffff
 FG = 0x000000
 
 GAP = 1
-RES = 1
+RES = 0.01
 
-FN = lambda z : z ** 2
+FN = lambda z : z**3
 
 MAX = 25
 MIN = -MAX
 
-ZOOMX = 1
-ZOOMY = ZOOMX
+ZOOMX = 100
+ZOOMY = 100
 
 DISPLAY = pygame.display.set_mode((WIDTH, WIDTH))
 
