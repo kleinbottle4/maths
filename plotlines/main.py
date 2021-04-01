@@ -11,12 +11,12 @@ FG = (0x000000, 0x0000ff)
 GAP = 10
 RES = 0.1
 
-FN = lambda z : z**2
+FN = lambda z : 200000/z**2
 
-MAX = 250
+MAX = HALFWIDTH
 MIN = -MAX
 
-ZOOMX = 1/100
+ZOOMX = 1
 ZOOMY = ZOOMX
 
 DISPLAY = pygame.display.set_mode((WIDTH, WIDTH))

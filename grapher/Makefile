@@ -1,1 +1,1 @@
-/home/syed/tp/pygame/Makefile
+/home/syed/.local/etc/tp/pygame/Makefile

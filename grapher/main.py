@@ -11,19 +11,19 @@ FG_COLOUR = 0xff0000
 
 def main(argv):
     display = pygame.display.set_mode((WIDTH, WIDTH))
-    p = 10
-    sx = 100
-    sy = 100
+    p = 0.04
+    sx = 25
+    sy = 25
     expr = "c"
     while expr != 'q':
         if expr == 'c':
             reset_disp(display)
         elif expr == 'p':
-            p = int(input('Precision: '))
+            p = float(input('Precision: '))
         elif expr == 'sx':
-            sx = int(input('Scale x: '))
+            sx = float(input('Scale x: '))
         elif expr == 'sy':
-            sy = int(input('Scale y: '))
+            sy = float(input('Scale y: '))
         else:
             try:
                 draw_graph(display, p, sx, sy, expr)
@@ -42,26 +42,23 @@ def reset_disp(display):
 
 def draw_graph(display, p, sx, sy, expr):
     parr = pygame.PixelArray(display)
-    x = - HW
-    while x < HW - 1:
+    x = - ceil(HW / sx)
+    y = 0
+    while x < floor(HW / sy):
         try:
             y = eval(expr)
         except Exception as e:
             print(e)
-        py = int((HW - y) * sy)
-        px = int((x + HW) * sx)
-        try:
-            parr[px][py] = FG_COLOUR
-        except IndexError as e:
-            print(e, ':', px, py)
-        except Exception as e:
-            print('Draw graph:', e)
-        else:
-            print(f"f({round(x, 1)}) = {round(y, 1)}")
-
-        x += 1 / p
+            x += p
+            continue
+        py = int(HW - (y * sy))
+        px = int((x * sx) + HW)
+        if 0 <= px < WIDTH and 0 <= py < WIDTH:
+            parr[px, py] = FG_COLOUR
+        print(f"f({x})) = {y}")
+        x += p
+        pygame.display.update()
     del parr
-    pygame.display.update()
 
 def draw_grid(display):
     i = 0

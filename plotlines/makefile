@@ -2,7 +2,7 @@ run :
 	python3 main.py
 
 view:
-	python3 main.py -m -i
+	python3 main.py -i
 
 md:
 	smu readme.md | w3m -T text/html
