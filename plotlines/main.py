@@ -5,8 +5,8 @@ import cmath
 WIDTH = 500
 HALFWIDTH = int(WIDTH/2)
 
-BG = 0x000000
-FG = (0xffffff, 0xffff00)
+BG = 0xffffff
+FG = (0x000000, 0x0000ff)
 
 GAP = 10
 RES = 0.1
