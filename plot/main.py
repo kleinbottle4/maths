@@ -6,40 +6,37 @@ WIDTH = 500
 HALFWIDTH = int(WIDTH/2)
 BG = 0xffffff
 FG = 0x000000
-RMAX = 10
-IMAX = 3.2
-RSTEP = 0.1
-ISTEP = 0.01
-FN = lambda z : 100 * cmath.exp(z)
+
+RMAX = 1250
+IMAX = 1250
+RSTEP = 10
+ISTEP = 10
+FN = lambda z : cmath.sqrt(z)
+
+ZOOMX = 1
+ZOOMY = 1
 
 def main(argv):
     DISPLAY = pygame.display.set_mode((WIDTH, WIDTH))
     DISPLAY.fill(BG)
     px = pygame.PixelArray(DISPLAY)
-
     a = 0
     while a <= RMAX:
         b = 0
         while b <= IMAX:
             w = complex(a, b)
             z = FN(w)
-            print(str(w), '->', str(z))
-
-            x = int(z.real) + HALFWIDTH
-            y = HALFWIDTH - int(z.imag)
+            x = int(ZOOMX*z.real) + HALFWIDTH
+            y = HALFWIDTH - int(ZOOMY*z.imag)
             if 0 <= x < WIDTH and 0 <= y < WIDTH:
                 px[x, y] = FG
-                pygame.display.update()
-
             b = incr(b, ISTEP)
-
-            if is_quit():
-                return 0
-
+        print(f"Re: {a}")
+        pygame.display.update()
+        if is_quit(): return 0
         a = incr(a, RSTEP)
-
+    print('done')
     del px
-
     while True:
         if is_quit():
             return 0
@@ -55,7 +52,6 @@ def incr(x, step):
     else:
         rtn = -x - step
     return rtn
-
 
 if __name__ == '__main__':
     from sys import argv
