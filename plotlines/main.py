@@ -2,57 +2,81 @@ import pygame
 from pygame.locals import *
 import cmath
 
-WIDTH = 500
-HALFWIDTH = int(WIDTH/2)
+WIDTH = 601
+HWIDTH = int(WIDTH/2)
+LWIDTH = 2
 
 BG = 0xffffff
-FG = (0x000000, 0x0000ff)
+FG = (0x000000, 0xff0000)
+MG = 0xC0C0C0
 
-GAP = 10
-RES = 0.1
+MAX = HWIDTH
+MIN = -HWIDTH
 
-FN = lambda z : 200000/z**2
+# defaults
+GAP = "10"
+RES = "1"
 
-MAX = HALFWIDTH
-MIN = -MAX
-
-ZOOMX = 1
-ZOOMY = ZOOMX
+FN = "z"
+MAT = "1 0 0 1"
 
 DISPLAY = pygame.display.set_mode((WIDTH, WIDTH))
 
 def main(argv):
-    bg = get_bg(argv, BG)
-    fg = get_fg(argv, FG, bg)
+    bg  = get_bg(argv, BG)
+    fg  = get_fg(argv, FG, bg)
+    fn  = eval("lambda z : " + get_arg(argv, "-f", FN))
+    mat = [float(i) for i in get_arg(argv, "-m", MAT).split()]
+    gap = int  (get_arg(argv, "-g", GAP))
+    res = float(get_arg(argv, "-r", RES))
+    zoom= float(get_arg(argv, '-z', WIDTH / (10 * int(GAP))))
+    orig= '-O' not in argv
     DISPLAY.fill(bg)
-    for i in range(MIN, MAX+1, GAP):
-        print(f"Im(z) = {i} ...")
-        proc_line(i, True, fg)
-        print(f"Re(z) = {i} ...")
-        proc_line(i, False, fg)
+    if orig:
+        for i in range(MIN, MAX+1, gap):
+            proc_line(i, lambda z : z, (1, 0, 0, 1), False, (MG,MG), WIDTH - 2, zoom)
+            proc_line(i, lambda z : z, (1, 0, 0, 1), True,  (MG,MG), WIDTH - 2, zoom)
+    for i in range(MIN, MAX+1, gap):
+        print(i)
+        proc_line(i, fn, mat, True,  fg, res, zoom)
+        proc_line(i, fn, mat, False, fg, res, zoom)
         pygame.display.update()
         if is_quit(): return 0
     print('done')
     while True:
         if is_quit(): return 0
 
-def is_quit():
-    return pygame.locals.QUIT in [e.type for e in pygame.event.get()]
+def proc_line(i, fn, mat, is_h, fg, res, zoom):
+    line1 = line( i, -HWIDTH, HWIDTH, is_h, res)
+    line2 = transform_line(line1, fn, mat, zoom)
+    colour = fg[is_h]
+    try:
+        pygame.draw.lines(DISPLAY, colour, False, line2, LWIDTH)
+    except Exception as e:
+        print("proc_line:", e)
+        print(line2)
 
-def transform_line(line, fn):
+def transform_line(line, fn, mat, zoom):
     rtn = []
     for z in line:
         try:
             w = fn(complex(z[0],z[1]))
-        except:
-            continue
+            a11, a12, a21, a22 = mat
+        except Exception as e:
+            print("transform", e)
         else:
-            rtn.append((w.real, w.imag))
+            x = w.real
+            y = w.imag
+            nx = zoom * (x * a11 + y * a12)
+            ny = zoom * (x * a21 + y * a22)
+            rtn.append(tuple(to_pygame_coords(nx, ny)))
     return rtn
 
-def to_pygame_coords(line):
-    return [ (HALFWIDTH + int(ZOOMX*x), HALFWIDTH - int(ZOOMY*y))
-            for x, y in line ]
+def to_pygame_coords(x, y):
+    return HWIDTH + int(x), HWIDTH - int(y)
+
+def is_quit():
+    return pygame.locals.QUIT in [e.type for e in pygame.event.get()]
 
 def line(k, _min, _max, is_h, res):
     rtn = []
@@ -62,18 +86,8 @@ def line(k, _min, _max, is_h, res):
         i += res
     return rtn
 
-def proc_line(i, is_h, fg):
-    line1 = line( i, -HALFWIDTH, HALFWIDTH, is_h, RES)
-    line2 = transform_line(line1, FN)
-    line3 = to_pygame_coords(line2)
-    colour = fg[is_h]
-    try:
-        pygame.draw.lines( DISPLAY, colour, False, line3)
-    except:
-        print("failed")
-
 def get_fg(argv, fg_def, bg):
-    if "-m" in argv:
+    if "-M" in argv:
         i = inv_clr(bg)
         return (i, i)
     else:
@@ -87,6 +101,13 @@ def get_bg(argv, bg_def):
         return inv_clr(bg_def)
     else:
         return bg_def
+
+def get_arg(argv, s, _def):
+    if s in argv:
+        i = argv.index(s)
+        return argv[i + 1]
+    else:
+        return _def
 
 def inv_clr(h):
     return 0xffffff - h
