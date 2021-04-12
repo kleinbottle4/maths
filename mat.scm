@@ -1,2 +1,0 @@
-(define (matmul a b)
-  

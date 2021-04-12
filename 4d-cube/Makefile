@@ -1,1 +1,0 @@
-/home/syed/.local/etc/tp/pygame/Makefile

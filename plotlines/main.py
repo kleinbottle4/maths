@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import cmath
+from cmath import *
 
 WIDTH = 601
 HWIDTH = int(WIDTH/2)
@@ -27,24 +27,31 @@ def main(argv):
     fg  = get_fg(argv, FG, bg)
     fn  = eval("lambda z : " + get_arg(argv, "-f", FN))
     mat = [float(i) for i in get_arg(argv, "-m", MAT).split()]
+    _min= int  (get_arg(argv, "-min", MIN))
+    _max= int  (get_arg(argv, "-max", MAX))
     gap = int  (get_arg(argv, "-g", GAP))
     res = float(get_arg(argv, "-r", RES))
-    zoom= float(get_arg(argv, '-z', WIDTH / (10 * int(GAP))))
+    zoom= float(get_arg(argv, '-z', WIDTH / (_max - _min)))
     orig= '-O' not in argv
     DISPLAY.fill(bg)
     if orig:
-        for i in range(MIN, MAX+1, gap):
+        for i in range(_min, _max+1, gap):
             proc_line(i, lambda z : z, (1, 0, 0, 1), False, (MG,MG), WIDTH - 2, zoom)
             proc_line(i, lambda z : z, (1, 0, 0, 1), True,  (MG,MG), WIDTH - 2, zoom)
-    for i in range(MIN, MAX+1, gap):
+    for i in range(_min, _max+1, gap):
         print(i)
-        proc_line(i, fn, mat, True,  fg, res, zoom)
-        proc_line(i, fn, mat, False, fg, res, zoom)
-        pygame.display.update()
-        if is_quit(): return 0
+        try:
+            proc_line(i, fn, mat, True,  fg, res, zoom)
+            proc_line(i, fn, mat, False, fg, res, zoom)
+            pygame.display.update()
+        except Exception as e:
+            print('main:', e)
+        if is_quit():
+            return 0
     print('done')
     while True:
-        if is_quit(): return 0
+        if is_quit():
+            return 0
 
 def proc_line(i, fn, mat, is_h, fg, res, zoom):
     line1 = line( i, -HWIDTH, HWIDTH, is_h, res)
@@ -63,7 +70,7 @@ def transform_line(line, fn, mat, zoom):
             w = fn(complex(z[0],z[1]))
             a11, a12, a21, a22 = mat
         except Exception as e:
-            print("transform", e)
+            print("transform_line:", e)
         else:
             x = w.real
             y = w.imag
