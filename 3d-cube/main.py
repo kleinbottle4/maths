@@ -81,12 +81,12 @@ def show_angles(status):
 def key_handler(_x, _y, _z):
     # { key: (x y or z?, anti-clockwise?) }
     map_keys = {
-            K_x: (0, 1),
-            K_r: (0, -1),
-            K_y: (1, 1),
-            K_9: (1, -1),
-            K_z: (2, 1),
-            K_a: (2, -1),
+            K_a: (0, 1),
+            K_b: (0, -1),
+            K_c: (1, 1),
+            K_d: (1, -1),
+            K_e: (2, 1),
+            K_f: (2, -1),
             }
     rtn = [_x, _y, _z]
     for e in pygame.event.get():
