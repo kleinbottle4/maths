@@ -10,7 +10,7 @@ Keep options separate, e.g. ''python3 main.py -f 'z\*\*2' -i''.
         applying function
     
     -z 25
-        Zoom (1 => no zoom)  
+        Zoom (100 => no zoom)  
     
     -g 10
         Gap between gridlines

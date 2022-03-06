@@ -5,10 +5,10 @@ from math import *
 import cmath
 import math
 
-WIDTH = 1000
+WIDTH = 500
 HWIDTH = int(WIDTH/2)
 GRID_SPACE = 10
-SF = 100
+SF = 50
 MAX = int(HWIDTH)
 MIN = -MAX
 
@@ -24,7 +24,7 @@ def approx(x, y, e):
 # FILTER = lambda z : \
 #         approx(phase(z-1)-phase(z+1), tau/12, E) \
 #         or approx(phase(z-1)-phase(z+1), -5 * tau/12, E)
-FILTER = lambda z : approx(abs(z-1), 1, 0.1)
+FILTER = lambda z : approx(phase((z-1)/z), 0.5 - pi, 0.05)
 DISPLAY = pygame.display.set_mode((WIDTH, WIDTH))
 
 def main(argv):
