@@ -2,6 +2,8 @@
 import pygame
 import pygame.locals
 import sys
+from math import *
+from cmath import *
 
 # * get_arg
 def get_arg(s, use_default = False, default = 1):
